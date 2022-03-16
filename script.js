@@ -34,7 +34,7 @@ function onSucess( position ) {
     // getting lat and log...
     const { latitude, longitude } = position.coords;
 
-   let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${ apiKey }`;
+   let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${ apiKey }`;
 
     fetchData(api);
 }
@@ -68,7 +68,7 @@ function requestApi( city ) {
 
     // let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
     // let api = `https://api.openweathermap.org/data/2.5/weather?lat=30&lon=35&appid=${ apiKey }`;
-    let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+    let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
   fetchData(api)
 }
@@ -100,11 +100,11 @@ function weatherDetails( info ) {
 
         // passing val to html element
 
-        wrapper.querySelector( '.temp .numb' ).innerText = temp;
+        wrapper.querySelector( '.temp .numb' ).innerText = Math.floor(temp);
         wrapper.querySelector( '.weather' ).innerText = description;
         wrapper.querySelector( '.location span' ).innerText = `${city}, ${country}`;
-        wrapper.querySelector( '.temp .numb-2' ).innerText = feels_like;
-        wrapper.querySelector( '.humidity span' ).innerText = humidity;
+        wrapper.querySelector( '.temp .numb-2' ).innerText = Math.floor(feels_like);
+        wrapper.querySelector( '.humidity span' ).innerText = `${humidity}%`;
         
 
 
