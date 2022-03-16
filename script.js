@@ -7,7 +7,8 @@ const inputPart = wrapper.querySelector( '.input-part' );
 const infoTxt = inputPart.querySelector( '.info-txt' );
 const inputField = inputPart.querySelector( 'input' );
 const locationBtn = inputPart.querySelector( 'button' );
-wIcon = document.querySelector( '.weather-part img')
+const wIcon = document.querySelector( '.weather-part img' );
+const arrow = wrapper.querySelector( 'header i' );
 
 inputField.addEventListener( "keyup", e => {
 
@@ -137,3 +138,7 @@ function weatherDetails( info ) {
    
 }
  
+
+arrow.addEventListener( 'click', () => {
+    wrapper.classList.remove( 'active' );
+})
