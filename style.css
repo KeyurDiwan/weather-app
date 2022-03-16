@@ -31,14 +31,53 @@ body {
     border-bottom: 1px solid #bfbfbf;
 }
 
+
+.input-part .info-txt {
+    font-size: 17px;
+   display: none;
+    text-align:center;
+    padding: 12px 10px;
+    border-radius: 9px;
+    margin-bottom: 15px ;
+
+}
+
+.info-txt.error{
+    display: block;
+     color: #721c24;
+     background: #f8d7da;
+     border: 1px solid #f5c6cb;
+
+}
+
+.info-txt.pending{
+    display: block;
+     color: #0c5460;
+     background: #d1ecf1;
+     border: 1px solid #bee5eb;
+     
+}
+
 header i {
     cursor: pointer;
-    font-size:30px;
+    font-size:0px;
     margin-right: 8px;
 }
 
+
+.wrapper.active header i{
+    font-size: 30px;
+    margin-left: 5px ;
+
+}
+
 .wrapper .input-part {
+    /* display: none; */
     margin: 20px 25px 30px;
+}
+
+.wrapper.active .input-part{
+    display: none; 
 }
 
 .input-part :where(input, button) {
@@ -53,6 +92,11 @@ header i {
 .input-part input {
     text-align: center;
     border: 1px solid #bfbfbf;
+}
+
+.input-part input:is(:focus, :valid) {
+    border: 2px solid #a4eeb4;
+     
 }
 
 .input-part .saparator {
@@ -80,3 +124,97 @@ header i {
 
 }
 
+.wrapper .weather-part {
+    margin: 30px 0 0;
+    display: none;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column
+}
+
+.wrapper.active .weather-part{
+    display: flex; 
+}
+
+.weather-part img {
+    max-width: 125px;
+}
+
+.weather-part .temp {
+    display: flex;
+    font-size: 72px;
+    font-weight: 500;
+}
+
+.weather-part .temp .numb {
+    font-weight: 600;
+}
+
+.weather-part .temp .deg {
+    font-size: 40px;
+    margin: 10px;
+    display:block;
+
+}
+
+.weather-part .location {
+     font-size: 21px;
+     display: flex;
+     align-items: center;
+     margin-bottom: 30px;
+}
+
+.location i {
+    font-size: 22px;
+    margin-right: 50px;
+
+}
+
+.weather-part .bottom-details {
+   
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #bfbfbf;
+    justify-content: space-between;
+
+}
+
+.bottom-details .column{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    padding: 15px 0;
+
+}
+
+
+.column i{
+    color: #a4eeb4;
+    font-size: 40px;
+
+}
+
+.column.humidity {
+    border-left: 1px solid #bfbfbf;
+
+}
+
+.details .temp, .humidity span{
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: -3px;
+
+}
+
+.details .temp .deg {
+    margin: 0;
+    font-size: 17px;
+    pad: 0 2px 0 1px;
+}
+
+.details p{
+    font-size: 14px;
+    margin-top: -6px;
+}
