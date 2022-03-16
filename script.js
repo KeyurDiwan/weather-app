@@ -7,6 +7,7 @@ const inputPart = wrapper.querySelector( '.input-part' );
 const infoTxt = inputPart.querySelector( '.info-txt' );
 const inputField = inputPart.querySelector( 'input' );
 const locationBtn = inputPart.querySelector( 'button' );
+wIcon = document.querySelector( '.weather-part img')
 
 inputField.addEventListener( "keyup", e => {
 
@@ -96,6 +97,24 @@ function weatherDetails( info ) {
         const country = info.sys.country;
         const { description, id } = info.weather[0];
         const { feels_like, humidity, temp } = info.main;
+
+
+        // change icon according weather temperature..!
+        if ( id == 800 ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnkawChjd6FWjg-e8zir7WbLa42BiW5abIPg&usqp=CAU';
+        } else if ( id >= 200 && id <= 232 ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREigFVnX5-Yc3-64ldK27vMS5YTN7kLSZRig&usqp=CAU';
+        } else if ( id >= 600 && id <= 622 ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcki_0l-CsKbCHiqbUINRwDVQTW6HnhrVTbw&usqp=CAU';
+        } else if ( id >= 701 && id <= 781 ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcbD6AoUP7MFHPb_i3muEybtWnHQD92_ZDYw&usqp=CAU';
+        } else if ( id >= 801 && id <= 804 ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_SHpXm_PAZjxJqeanVv5djFn4447DHoY9gw&usqp=CAU';
+        } else if ( ( id >= 300 && id <= 321 ) || ( id >= 500 && id <= 531 ) ) {
+            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZdaFZ_ycDuzLiZy7F7xspGT-Enze-qYoAAA&usqp=CAU';
+        }
+
+
 
 
         // passing val to html element
