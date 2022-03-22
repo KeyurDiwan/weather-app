@@ -1,144 +1,120 @@
-var apiKey = '25e62c9368d5952a27ccbb9896435a18';
-
-// let api;
-
-const wrapper = document.querySelector( '.wrapper' );
-const inputPart = wrapper.querySelector( '.input-part' );
-const infoTxt = inputPart.querySelector( '.info-txt' );
-const inputField = inputPart.querySelector( 'input' );
-const locationBtn = inputPart.querySelector( 'button' );
-const wIcon = document.querySelector( '.weather-part img' );
-const arrow = wrapper.querySelector( 'header i' );
-
-inputField.addEventListener( "keyup", e => {
-
-    // when user press enter key check input value is not empty..! 
-    if ( e.key == "Enter" && inputField.value != "" ) {
-        // console.log("enter key Pressed..!!");
-
-        requestApi(inputField.value);
-        
-    }
-} );
-
-
-locationBtn.addEventListener( 'click', () => {
-    if ( navigator.geolocation ) {
-        navigator.geolocation.getCurrentPosition( onSucess, onError );
-    } else {
-        alert( 'Please enable location to access this..!!' )
-    }
-} );
-
-function onSucess( position ) {
-    // console.log(position)
-
-    // getting lat and log...
-    const { latitude, longitude } = position.coords;
-
-   let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${ apiKey }`;
-
-    fetchData(api);
-}
-
-function onError( error ) {
-    // console.log(error)
-
-    infoTxt.innerText = error.message;
-    infoTxt.classList.add( 'error' );
-}
-
-
-function requestApi( city ) {
-    // console.log( city );
-
-
-
-// var geocoder = new google.maps.Geocoder();
-// // var address = document.getElementById("address").value;
-// geocoder.geocode( { 'address': address}, function(results, status) {
-//   if (status == google.maps.GeocoderStatus.OK)
-//   {
-//       // do something with the geocoded result
-//       //
-//      let a =  results[0].geometry.location.latitude
-//       let b = results[0].geometry.location.longitude
-
-//       console.log(a,b)
-//   }
-// });
-
-    // let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-    // let api = `https://api.openweathermap.org/data/2.5/weather?lat=30&lon=35&appid=${ apiKey }`;
-    let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-
-  fetchData(api)
-}
-
-function fetchData(api) {
-      infoTxt.innerText = "Getting weather details...!!!";
-    infoTxt.classList.add( 'pending' );
-
-
-    fetch( api ).then( response =>  response.json() ).then( res => weatherDetails( res ) );
-}
-
-function weatherDetails( info ) {
-    
-    if ( info.cod == '404' ) {
-
-        infoTxt.classList.replace( 'pending', 'error' );
-        infoTxt.innerText = `${ inputField.value } is not valid city name..!!`;
-    } else {
-
-
-
-        // fetching val from object
-        const city = info.name;
-        const country = info.sys.country;
-        const { description, id } = info.weather[0];
-        const { feels_like, humidity, temp } = info.main;
-
-
-        // change icon according weather temperature..!
-        if ( id == 800 ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnkawChjd6FWjg-e8zir7WbLa42BiW5abIPg&usqp=CAU';
-        } else if ( id >= 200 && id <= 232 ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREigFVnX5-Yc3-64ldK27vMS5YTN7kLSZRig&usqp=CAU';
-        } else if ( id >= 600 && id <= 622 ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcki_0l-CsKbCHiqbUINRwDVQTW6HnhrVTbw&usqp=CAU';
-        } else if ( id >= 701 && id <= 781 ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcbD6AoUP7MFHPb_i3muEybtWnHQD92_ZDYw&usqp=CAU';
-        } else if ( id >= 801 && id <= 804 ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_SHpXm_PAZjxJqeanVv5djFn4447DHoY9gw&usqp=CAU';
-        } else if ( ( id >= 300 && id <= 321 ) || ( id >= 500 && id <= 531 ) ) {
-            wIcon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZdaFZ_ycDuzLiZy7F7xspGT-Enze-qYoAAA&usqp=CAU';
+/* Fetching Data from OpenWeatherMap API */
+let weather = {
+  apiKey: "aba6ff9d6de967d5eac6fd79114693cc",
+  fetchWeather: function (city) {
+    fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+        city +
+        "&units=metric&appid=" +
+        this.apiKey
+    )
+      .then((response) => {
+        if (!response.ok) {
+          alert("No weather found.");
+          throw new Error("No weather found.");
         }
+        return response.json();
+      })
+      .then((data) => this.displayWeather(data));
+  },
+  displayWeather: function (data) {
+    const { name } = data;
+    const { icon, description } = data.weather[0];
+    const { temp, humidity } = data.main;
+    const { speed } = data.wind;
+    document.querySelector(".city").innerText = "Weather in " + name;
+    document.querySelector(".icon").src =
+      "https://openweathermap.org/img/wn/" + icon + ".png";
+    document.querySelector(".description").innerText = description;
+    document.querySelector(".temp").innerText = temp + "°C";
+    document.querySelector(".humidity").innerText =
+      "Humidity: " + humidity + "%";
+    document.querySelector(".wind").innerText =
+      "Wind speed: " + speed + " km/h";
+    document.querySelector(".weather").classList.remove("loading");
+    document.body.style.backgroundImage =
+      "url('https://source.unsplash.com/1600x900/?" + name + "')";
+  },
+  search: function () {
+    this.fetchWeather(document.querySelector(".search-bar").value);
+  },
+};
 
+/* Fetching Data from OpenCageData Geocoder */
+let geocode = {
+  reverseGeocode: function (latitude, longitude) {
+    var apikey = "90a096f90b3e4715b6f2e536d934c5af";
 
+    var api_url = "https://api.opencagedata.com/geocode/v1/json";
 
+    var request_url =
+      api_url +
+      "?" +
+      "key=" +
+      apikey +
+      "&q=" +
+      encodeURIComponent(latitude + "," + longitude) +
+      "&pretty=1" +
+      "&no_annotations=1";
 
-        // passing val to html element
+    var request = new XMLHttpRequest();
+    request.open("GET", request_url, true);
 
-        wrapper.querySelector( '.temp .numb' ).innerText = Math.floor(temp);
-        wrapper.querySelector( '.weather' ).innerText = description;
-        wrapper.querySelector( '.location span' ).innerText = `${city}, ${country}`;
-        wrapper.querySelector( '.temp .numb-2' ).innerText = Math.floor(feels_like);
-        wrapper.querySelector( '.humidity span' ).innerText = `${humidity}%`;
-        
+    request.onload = function () {
 
+      if (request.status == 200) {
+        var data = JSON.parse(request.responseText);
+        weather.fetchWeather(data.results[0].components.city);
+        console.log(data.results[0].components.city)
+      } else if (request.status <= 500) {
 
+        console.log("unable to geocode..! Response code: " + request.status);
+        var data = JSON.parse(request.responseText);
+        console.log("error msg: " + data.status.message);
+      } else {
+        console.log("server error");
+      }
+    };
 
-        infoTxt.classList.remove( 'pending', 'error' );
-        wrapper.classList.add( 'active' );
-         console.log( info );
+    request.onerror = function () {
+      console.log("unable to connect to server");
+    };
 
+    request.send(); 
+  },
+  getLocation: function() {
+    function success (data) {
+      geocode.reverseGeocode(data.coords.latitude, data.coords.longitude);
     }
-   
-   
-}
- 
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, console.error);
+    }
+    else {
+      weather.fetchWeather("Chennai");
+    }
+  }
+};
 
-arrow.addEventListener( 'click', () => {
-    wrapper.classList.remove( 'active' );
-})
+document.querySelector(".search button").addEventListener("click", function () {
+  weather.search();
+});
+
+document
+  .querySelector(".search-bar")
+  .addEventListener("keyup", function (event) {
+    if (event.key == "Enter") {
+      weather.search();
+    }
+  });
+
+weather.fetchWeather("Chennai");
+
+document
+  .querySelector(".search-bar")
+  .addEventListener("keyup", function (event) {
+    if (event.key == "Enter") {
+      weather.search();
+    }
+  });
+
+geocode.getLocation();
