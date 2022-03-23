@@ -1,120 +1,141 @@
-/* Fetching Data from OpenWeatherMap API */
-let weather = {
-  apiKey: "aba6ff9d6de967d5eac6fd79114693cc",
-  fetchWeather: function (city) {
-    fetch(
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-        city +
-        "&units=metric&appid=" +
-        this.apiKey
-    )
-      .then((response) => {
-        if (!response.ok) {
-          alert("No weather found.");
-          throw new Error("No weather found.");
+const timeEl = document.getElementById('time');
+const dateEl = document.getElementById('date');
+const currentWeatherItemsEl = document.getElementById('current-weather-items');
+const timezone = document.getElementById('time-zone');
+const countryEl = document.getElementById('country');
+const weatherForecastEl = document.getElementById('weather-forecast');
+const currentTempEl = document.getElementById('current-temp');
+
+const inputField = document.querySelector( 'input' );
+
+inputField.addEventListener( "keyup", e => {
+
+    // when user press enter key check input value is not empty..! 
+    if ( e.key == "Enter" && inputField.value != "" ) {
+        // console.log("enter key Pressed..!!");
+
+        requestApi(inputField.value);
+
+    }
+} );
+
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const API_KEY ='49cc8c821cd2aff9af04c9f98c36eb74';
+
+setInterval(() => {
+    const time = new Date();
+    const month = time.getMonth();
+    const date = time.getDate();
+    const day = time.getDay();
+    const hour = time.getHours();
+    const hoursIn12HrFormat = hour >= 13 ? hour %12: hour
+    const minutes = time.getMinutes();
+    const ampm = hour >=12 ? 'PM' : 'AM'
+
+    // timeEl.innerHTML = (hoursIn12HrFormat < 10? '0'+hoursIn12HrFormat : hoursIn12HrFormat) + ':' + (minutes < 10? '0'+minutes: minutes)+ ' ' + `<span id="am-pm">${ampm}</span>`
+
+    // dateEl.innerHTML = days[day] + ', ' + date+ ' ' + months[month]
+
+}, 1000);
+
+getWeatherData()
+function getWeatherData () {
+    navigator.geolocation.getCurrentPosition((success) => {
+        
+        let {latitude, longitude } = success.coords;
+
+        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res => res.json()).then(data => {
+
+        console.log(data)
+        showWeatherData(data);
+        })
+
+    })
+}
+
+
+function requestApi( city ) {
+    //  fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res => res.json()).then(data => {
+    fetch( `https://api.openweathermap.org/data/2.5/weather?q=${ city }&appid=${ API_KEY }` ).then( res => res.json() ).then( data => {
+
+        let latitude = data.coord.lat;
+        let longitude = data.coord.lon;
+
+        findByCity(latitude,longitude )
+
+    } );
+
+ 
+}
+
+function findByCity( latitude, longitude ) {
+    console.log( latitude, longitude )
+     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res => res.json()).then(data => {
+
+        console.log(data)
+        showWeatherData(data);
+        })
+}
+
+function showWeatherData (data){
+    let {humidity, pressure, sunrise, sunset, wind_speed} = data.current;
+
+    // timezone.innerHTML = data.timezone;
+    countryEl.innerHTML = data.lat + 'N ' + data.lon+'E'
+
+    currentWeatherItemsEl.innerHTML = 
+    `<div class="weather-item">
+        <div>Humidity</div>
+        <div>${humidity}%</div>
+    </div>
+    <div class="weather-item">
+        <div>Pressure</div>
+        <div>${pressure}</div>
+    </div>
+    <div class="weather-item">
+        <div>Wind Speed</div>
+        <div>${wind_speed}</div>
+    </div>
+    <div class="weather-item">
+        <div>Sunrise</div>
+        <div>${window.moment(sunrise * 1000).format('HH:mm a')}</div>
+    </div>
+    <div class="weather-item">
+        <div>Sunset</div>
+        <div>${window.moment(sunset*1000).format('HH:mm a')}</div>
+    </div>
+    
+    
+    `;
+
+    let otherDayForcast = ''
+    data.daily.forEach((day, idx) => {
+        if(idx == 0){
+            currentTempEl.innerHTML = `
+            <img src="http://openweathermap.org/img/wn//${day.weather[0].icon}@4x.png" alt="weather icon" class="w-icon">
+            <div class="other">
+                <div class="day">${window.moment(day.dt*1000).format('dddd')}</div>
+                <div class="temp">Night - ${day.temp.night}&#176;C</div>
+                <div class="temp">Day - ${day.temp.day}&#176;C</div>
+            </div>
+            
+            `
+        }else{
+            otherDayForcast += `
+            <div class="weather-forecast-item">
+                <div class="day">${window.moment(day.dt*1000).format('ddd')}</div>
+                <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="w-icon">
+                <div class="temp">Night - ${day.temp.night}&#176;C</div>
+                <div class="temp">Day - ${day.temp.day}&#176;C</div>
+            </div>
+            
+            `
         }
-        return response.json();
-      })
-      .then((data) => this.displayWeather(data));
-  },
-  displayWeather: function (data) {
-    const { name } = data;
-    const { icon, description } = data.weather[0];
-    const { temp, humidity } = data.main;
-    const { speed } = data.wind;
-    document.querySelector(".city").innerText = "Weather in " + name;
-    document.querySelector(".icon").src =
-      "https://openweathermap.org/img/wn/" + icon + ".png";
-    document.querySelector(".description").innerText = description;
-    document.querySelector(".temp").innerText = temp + "°C";
-    document.querySelector(".humidity").innerText =
-      "Humidity: " + humidity + "%";
-    document.querySelector(".wind").innerText =
-      "Wind speed: " + speed + " km/h";
-    document.querySelector(".weather").classList.remove("loading");
-    document.body.style.backgroundImage =
-      "url('https://source.unsplash.com/1600x900/?" + name + "')";
-  },
-  search: function () {
-    this.fetchWeather(document.querySelector(".search-bar").value);
-  },
-};
+    })
 
-/* Fetching Data from OpenCageData Geocoder */
-let geocode = {
-  reverseGeocode: function (latitude, longitude) {
-    var apikey = "90a096f90b3e4715b6f2e536d934c5af";
 
-    var api_url = "https://api.opencagedata.com/geocode/v1/json";
-
-    var request_url =
-      api_url +
-      "?" +
-      "key=" +
-      apikey +
-      "&q=" +
-      encodeURIComponent(latitude + "," + longitude) +
-      "&pretty=1" +
-      "&no_annotations=1";
-
-    var request = new XMLHttpRequest();
-    request.open("GET", request_url, true);
-
-    request.onload = function () {
-
-      if (request.status == 200) {
-        var data = JSON.parse(request.responseText);
-        weather.fetchWeather(data.results[0].components.city);
-        console.log(data.results[0].components.city)
-      } else if (request.status <= 500) {
-
-        console.log("unable to geocode..! Response code: " + request.status);
-        var data = JSON.parse(request.responseText);
-        console.log("error msg: " + data.status.message);
-      } else {
-        console.log("server error");
-      }
-    };
-
-    request.onerror = function () {
-      console.log("unable to connect to server");
-    };
-
-    request.send(); 
-  },
-  getLocation: function() {
-    function success (data) {
-      geocode.reverseGeocode(data.coords.latitude, data.coords.longitude);
-    }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, console.error);
-    }
-    else {
-      weather.fetchWeather("Chennai");
-    }
-  }
-};
-
-document.querySelector(".search button").addEventListener("click", function () {
-  weather.search();
-});
-
-document
-  .querySelector(".search-bar")
-  .addEventListener("keyup", function (event) {
-    if (event.key == "Enter") {
-      weather.search();
-    }
-  });
-
-weather.fetchWeather("Chennai");
-
-document
-  .querySelector(".search-bar")
-  .addEventListener("keyup", function (event) {
-    if (event.key == "Enter") {
-      weather.search();
-    }
-  });
-
-geocode.getLocation();
+    weatherForecastEl.innerHTML = otherDayForcast;
+}
