@@ -78,7 +78,7 @@ function getWeatherData () {
         let {latitude, longitude } = success.coords;
 
         fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res => res.json()).then(data => {
-            hideLoading()
+          
         
         console.log(data)
         showWeatherData(data);
@@ -113,11 +113,11 @@ function findByCity( latitude, longitude ) {
 }
 
 function showWeatherData (data){
-    
+  
     console.log("temp:",data.current.temp);
 
     let tempForBack = data.current.temp;
-
+    hideLoading()
     if(tempForBack < 30) {
         document.body.style.backgroundImage = "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGBn_D8xf2kW6v47Rv9RhjZJUiJDo5lcGXXw&usqp=CAU')";
     }
