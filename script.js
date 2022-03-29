@@ -10,7 +10,7 @@ const weatherForecastEl = document.getElementById('weather-forecast');
 const currentTempEl = document.getElementById('current-temp');
 
 const inputField = document.querySelector( 'input' );
-document.body.style.backgroundImage = "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_s6Tw8DFqg1KTQ670XFKlW0BsYa0Gyt8Sxg&usqp=CAU')";
+document.body.style.backgroundImage = "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC3uZvPVFUJogYtNeWDK2-3o8lHoIjtI6qLA&usqp=CAU')";
 
 
 
