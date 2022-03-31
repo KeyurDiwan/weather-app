@@ -2,8 +2,8 @@
 
 *{
     box-sizing: border-box;
-    margin:0;
-    padding:0;
+    margin:0px;
+    padding:0px;
 }
 
 body{
@@ -17,8 +17,8 @@ body{
 
 #extra {
     text-align: center;
-    margin-left: 100px;
-    margin-top: 200px;
+    /* margin-left: 100px;
+    margin-top: 200px; */
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 25px;
 }
@@ -36,32 +36,32 @@ body{
 .date-container{
     font-weight: 100;
 }
-.date-container .time{
+/* .date-container .time{
     font-size: 70px;
-}
+} */
 
-.date-container #am-pm{
+/* .date-container #am-pm{
     font-size: 30px;
     margin-left: 20px;
-}
+} */
 
-.date-container .date{
+/* .date-container .date{
     font-size: 30px;
-}
+} */
 
-.place-container{
+/* .place-container{
     text-align: end;
-}
+} */
 
-.place-container .time-zone{
+/* .place-container .time-zone{
     font-size: 30px;
     font-weight: 100;
-}
+} */
 
-.place-container .country{
+/* .place-container .country{
     font-size: 20px;
     font-weight: 700;
-}
+} */
 
 .current-info #current-weather-items{
     display: flex;
@@ -96,30 +96,6 @@ body{
     justify-content: center;
     overflow-y: hidden;
 }
-
-/* .future-forecast .today{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding:15px;
-    padding-right: 40px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.2)
-} */
-
-/* .future-forecast .today .day{
-    padding: 5px 15px;
-    background: #3c3c44;
-    border-radius: 50px;
-    text-align: center;
-}
-
-.future-forecast .today .temp{
-    font-size: 18px;
-    padding-top: 15px;
-} */
 
 .future-forecast .weather-forecast{
     display: flex;
@@ -159,7 +135,6 @@ body{
     border: 7px solid #eee;
     padding: 15px;
     border-radius: 10px;
-    /* background: rgba(0,0,0,0.2) */
 }
 
  .weather-forecast-item-current .day{
@@ -173,7 +148,6 @@ body{
     font-weight: 100;
     font-size: 15px;
 }
-
 
 @media only screen and  (max-width:730px){
     
@@ -229,19 +203,12 @@ body{
         overflow-x: scroll;
     }
 }
-
-
-
-
 .search {
   display: flex;
   align-items: center;
 
   justify-content: center;
 }
-
-
-
 input.search-bar {
   border: none;
   outline: none;
@@ -250,20 +217,10 @@ input.search-bar {
   background: rgba( 0, 0, 0, 0.30 );
   color: white;
   font-family: inherit;
-  
   font-size: 105%;
   margin-top: 10px;
   width: calc(100% - 100px);
 }
-
-
-
-
-
-
-
-
-
 
 .container {
     max-width: 550px;
